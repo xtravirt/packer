@@ -1,0 +1,1 @@
+/packer/packer build -var-file linuxcredentials.json ubuntu1804.json

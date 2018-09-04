@@ -1,0 +1,64 @@
+{
+  "builders": [
+    {
+      "type": "vmware-iso",
+      "iso_url": "{{user `iso_url`}}",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "vnc_disable_password": "True",
+      "headless": true,
+      "boot_wait": "2m",
+      "ssh_username": "sonar",
+      "ssh_password": "sonar",
+      "ssh_wait_timeout": "6h",
+      "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+      "guest_os_type": "windows9srv-64",
+      "tools_upload_flavor": "windows",
+      "disk_size": 61440,
+      "vnc_port_min": 5900,
+      "vnc_port_max": 5980,
+      "floppy_files": [
+        "{{user `autounattend`}}",
+        "./windows/openssh.ps1",
+        "./windows/drivers/vmxnet3",
+        "./windows/drivers/vmxnet",
+        "./windows/vm-guest-tools.bat",
+        "./windows/enable-rdp.bat",
+        "./windows/compile-dotnet-assemblies.bat",
+        "./windows/disable-auto-logon.bat",
+        "./windows/compact.bat"
+      ],
+
+    "remote_type": "esx5",
+    "remote_host": "{{user `esxi_host`}}",
+    "remote_datastore": "{{user `esxi_datastore`}}",
+    "remote_username": "{{user `esxi_username`}}",
+    "remote_password": "{{user `esxi_password`}}",
+    "keep_registered": true,
+
+      "vmx_data": {
+        "ethernet0.networkName": "Guest",
+        "RemoteDisplay.vnc.enabled": "false",
+        "RemoteDisplay.vnc.port": "5900",
+        "memsize": "4196",
+        "numvcpus": "2",
+        "scsi0.virtualDev": "lsisas1068"
+      }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "remote_path": "/tmp/script.bat",
+      "execute_command": "{{.Vars}} cmd /c C:/Windows/Temp/script.bat",
+      "scripts": [
+      ]
+    }
+  ],
+  "variables": {
+    "iso_url": "/packer/iso/windows-server-2016.iso",
+    "iso_checksum_type": "md5",
+    "iso_checksum": "91d7b2ebcff099b3557570af7a8a5cd6",
+    "autounattend": "./windows/answer_files/2016/Autounattend.xml"
+  }
+}

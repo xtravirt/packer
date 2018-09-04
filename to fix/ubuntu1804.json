@@ -1,0 +1,63 @@
+{
+  "builders": [{
+    "name": "ub1804tmp",
+    "vm_name": "ub1804tmp",
+    "type": "vmware-iso",
+    "guest_os_type": "ubuntu-64",
+    "tools_upload_flavor": "linux",
+    "headless": false,
+    "iso_url": "http://cdimage.ubuntu.com/releases/18.04.1/release/ubuntu-18.04.1-server-amd64.iso",
+    "iso_checksum": "a5b0ea5918f850124f3d72ef4b85bda82f0fcd02ec721be19c1a6952791c8ee8",
+    "iso_checksum_type": "sha256",
+    "ssh_username": "sonar",
+    "ssh_password": "Sonar!",
+    "ssh_timeout": "15m",
+    "disk_type_id": "thin",
+    "vnc_disable_password": "True",
+    "floppy_files": [ 
+        "./ubuntu-1804-preseed.cfg"
+    ],
+    "boot_command": [
+                " <esc><wait>",
+                " <esc><wait>",
+                " <enter><wait>",
+                " /install/vmlinuz",
+                " initrd=/install/initrd.gz",
+                " auto=true",
+                " priority=critical",
+                " preseed/file=/floppy/ubuntu-1804-preseed.cfg",
+                "<enter>"
+    ],
+
+    "shutdown_command": "echo 'shutdown -P now' > shutdown.sh; echo 'nullgrid'|sudo -S sh 'shutdown.sh'",
+
+    "remote_type": "esx5",
+    "remote_host": "{{user `esxi_host`}}",
+    "remote_datastore": "{{user `esxi_datastore`}}",
+    "remote_username": "{{user `esxi_username`}}",
+    "remote_password": "{{user `esxi_password`}}",
+    "keep_registered": true,
+
+    "vmx_data": {
+      "ethernet0.networkName": "Guest",
+      "memsize": "2048",
+      "numvcpus": "2",
+      "cpuid.coresPerSocket": "1"
+    }
+  }],
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "scripts": [
+        "/packer/linuxScripts/open-vm-tools.sh",
+        "/packer/linuxScripts/base.sh",
+        "/packer/linuxScripts/update.sh",
+        "/packer/linuxScripts/motd.sh",
+        "/packer/linuxScripts/prepare_template.sh"
+      ],
+
+      "execute_command": "echo 'sonar' | {{ .Vars }} sudo -E -S bash '{{ .Path }}'"
+    }
+  ]
+}
