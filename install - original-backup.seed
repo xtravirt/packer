@@ -54,7 +54,7 @@ d-i pkgsel/upgrade                                          select      safe-upg
 d-i pkgsel/update-policy                                    select      none
 d-i pkgsel/updatedb                                         boolean     true
 #d-i pkgsel/include                                          string      openssh-server nano htop
-d-i pkgsel/include                                          string      install unzip openssh-server open-vm-tools apt-transport-https openjdk-8-jdk
+d-i pkgsel/include                                          string      install unzip ccze slurm ncdu nano nmon mingetty openssh-server screen open-vm-tools apt-transport-https openjdk-8-jdk
 
 # disk partitioning
 d-i partman/confirm_write_new_label                         boolean     true
