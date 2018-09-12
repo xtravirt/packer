@@ -89,9 +89,9 @@ while true; do
     echo
     read -p " please enter your preference: [1]: " ubver
     case $ubver in
-        [1]* )  download_file="ubuntu-18.04.1-server-amd64.iso"
-                download_location="http://cdimage.ubuntu.com/ubuntu/releases/18.04/release/"
-                new_iso_name="ubuntu-$bion-server-amd64-unattended.iso"
+        [1]* )  download_file="mini.iso"
+                download_location="http://archive.ubuntu.com/ubuntu/dists/bionic-updates/main/installer-amd64/current/images/netboot/"
+                new_iso_name="ubuntu-$bion-server-amd64-mini-unattended.iso"
                 break;;
         * ) echo " please answer [1]";;
     esac
