@@ -205,6 +205,7 @@ echo "Amend isolinux.cfg timeout value entry: Pass"
 #echo "Generate late command & execute: Pass"
 
 # copy the seed file to the iso
+mkdir -p $tmp/iso_new/preseed
 cp -rT $tmp/$seed_file $tmp/iso_new/preseed/$seed_file
 echo "copy the install seed file to the iso: Pass"
 
